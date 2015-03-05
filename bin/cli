@@ -1,6 +1,3 @@
-
-require 'launchy'
-
 def get_user_by_email
   puts "Input your email:"
   email = gets.chomp
