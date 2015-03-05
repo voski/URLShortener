@@ -30,10 +30,33 @@ class ShortenedUrl < ActiveRecord::Base
     end
   end
 
+  def num_clicks
+    visits.count
+  end
+
+  def num_uniques
+    visitors.count
+  end
+
+  def num_recent_uniques
+    visitors.where("visits.created_at > ?", 10.minutes.ago).count
+  end
+
   belongs_to(
     :submitter,
     class_name: 'User',
     foreign_key: :submitter_id,
     primary_key: :id
   )
+
+  has_many(
+    :visits,
+    class_name: 'Visit',
+    foreign_key: :url_id,
+    primary_key: :id
+  )
+
+  has_many :visitors, -> { distinct }, through: :visits, source: :visitors
+
+
 end
